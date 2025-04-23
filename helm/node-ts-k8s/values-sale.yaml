@@ -1,0 +1,12 @@
+replicaCount: 2
+image:
+  repository: sale-service
+  tag: "2.0.0"
+  pullPolicy: IfNotPresent
+service:
+  type: NodePort
+  port: 3002
+pvc:
+  name: sale-log-pvc
+  storage: 5Gi
+  mountPath: /logs/sale

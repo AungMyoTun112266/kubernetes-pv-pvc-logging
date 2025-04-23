@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}-{{ .Values.service.port }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-{{ .Values.service.port }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-{{ .Values.service.port }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+        volumeMounts:
+        - name: log-storage
+          mountPath: {{ .Values.pvc.mountPath }}
+        env:
+        - name: PORT
+          value: "{{ .Values.service.port }}"
+        - name: LOG_DIR
+          value: {{ .Values.pvc.mountPath }}
+      volumes:
+      - name: log-storage
+        persistentVolumeClaim:
+          claimName: {{ .Values.pvc.name }}

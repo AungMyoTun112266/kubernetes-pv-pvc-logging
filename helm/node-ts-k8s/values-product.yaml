@@ -1,0 +1,12 @@
+replicaCount: 2
+image:
+  repository: product-service
+  tag: "2.0.2"
+  pullPolicy: IfNotPresent
+service:
+  type: NodePort
+  port: 3001
+pvc:
+  name: product-log-pvc
+  storage: 5Gi
+  mountPath: /logs/product
